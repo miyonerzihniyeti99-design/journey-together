@@ -967,7 +967,7 @@ function Index() {
       <RaporDiyalog
         acik={raporAcik}
         onClose={() => setRaporAcik(false)}
-        talebeler={talebeler}
+        talebeler={hafizTalebeler}
         haftaBas={seciliHafta}
         haftaEtiketi={haftaEtiket(seciliHafta)}
         onTalebe={(t) => {
