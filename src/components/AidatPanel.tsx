@@ -22,6 +22,8 @@ import {
   aidatTutariniDinle,
   aidatTutariKaydet,
   aidatOdemeAyarla,
+  GRUPLAR,
+  type Grup,
   type Talebe,
 } from "@/lib/talebeler";
 import { bashHarfler } from "@/lib/foto";
