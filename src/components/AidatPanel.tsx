@@ -22,6 +22,7 @@ import {
   aidatTutariniDinle,
   aidatTutariKaydet,
   aidatOdemeAyarla,
+  talebeGuncelle,
   GRUPLAR,
   type Grup,
   type Talebe,
