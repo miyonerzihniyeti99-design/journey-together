@@ -368,8 +368,10 @@ function Index() {
   const [parolaDegistirHata, setParolaDegistirHata] = useState<string | null>(null);
 
   const [sekme, setSekme] = useState<"hafizlik" | "aidat">("hafizlik");
+  const [grupFiltre, setGrupFiltre] = useState<Grup | "hepsi">("hepsi");
 
   const [vermediAcik, setVermediAcik] = useState(false);
+
   const [raporAcik, setRaporAcik] = useState(false);
 
   const dil: Dil = "tr";
