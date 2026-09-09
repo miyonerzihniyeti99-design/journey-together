@@ -245,6 +245,12 @@ export default function AidatPanel({
         })}
       </div>
 
+      {grupFiltre === "hepsi" && hocaModu && (
+        <p className="mb-3 text-xs text-muted-foreground">
+          Talebeleri gruplara atamak için tablodaki{" "}
+          <span className="font-medium text-foreground">Grup</span> menüsünü kullanın.
+        </p>
+      )}
       {aktifGrup && (
         <p className="mb-3 text-xs text-muted-foreground">
           Mesul hoca:{" "}
