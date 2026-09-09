@@ -903,7 +903,7 @@ function Index() {
                   </TableRow>
                   );
                 })}
-                {!yuklendi && talebeler.length === 0 && (
+                {!yuklendi && hafizTalebeler.length === 0 && (
                   <TableRow>
                     <TableCell
                       colSpan={5 + (hocaModu ? 1 : 0)}
