@@ -67,6 +67,7 @@ export default function AidatPanel({
   const [tutarDuzenle, setTutarDuzenle] = useState(false);
   const [tutarTaslak, setTutarTaslak] = useState("0");
   const [filtre, setFiltre] = useState<"tumu" | "odeyen" | "odemeyen">("tumu");
+  const [grupFiltre, setGrupFiltre] = useState<Grup | "hepsi">("hepsi");
 
   useEffect(() => {
     const unsub = aidatTutariniDinle((t) => {
