@@ -842,7 +842,7 @@ function Index() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {talebeler.map((t, i) => {
+                {hafizTalebeler.map((t, i) => {
                   const hafta = ilerleme(t, seciliHafta, haftaSonu);
                   return (
                   <TableRow key={t.id} className="hover:bg-muted/30">
