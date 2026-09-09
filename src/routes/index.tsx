@@ -65,6 +65,8 @@ import {
   talebeEkle,
   talebeGuncelle,
   talebeSil,
+  GRUPLAR,
+  type Grup,
   type Talebe,
   type SayfaKaydi,
   type KiraatYonu,
