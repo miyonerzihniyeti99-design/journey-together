@@ -926,7 +926,7 @@ function Index() {
                     </TableCell>
                   </TableRow>
                 )}
-                {yuklendi && !yuklemeHata && talebeler.length === 0 && (
+                {yuklendi && !yuklemeHata && hafizTalebeler.length === 0 && (
                   <TableRow>
                     <TableCell
                       colSpan={5 + (hocaModu ? 1 : 0)}
