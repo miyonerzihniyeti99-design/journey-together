@@ -349,6 +349,7 @@ function Index() {
 
   const [hocaModu, setHocaModu] = useState(false);
   const [girisAcik, setGirisAcik] = useState(false);
+  const [gruplarAcik, setGruplarAcik] = useState(false);
   const [parolaTaslak, setParolaTaslak] = useState("");
   const [parolaHata, setParolaHata] = useState<string | null>(null);
 
