@@ -1104,26 +1104,54 @@ function Index() {
             {talebeler.map((t) => (
               <div
                 key={t.id}
-                className="flex items-center justify-between gap-3 rounded-md border border-border/60 px-3 py-2"
+                className="rounded-md border border-border/60 px-3 py-2"
               >
-                <span className="min-w-0 truncate text-sm font-medium">{t.isim}</span>
-                <select
-                  value={t.grup ?? ""}
-                  onChange={(e) => {
-                    const yeni = e.target.value as Grup | "";
-                    void talebeGuncelle(t.id, {
-                      grup: yeni === "" ? undefined : yeni,
-                    });
-                  }}
-                  className="h-9 shrink-0 rounded-md border border-border bg-background px-2 text-xs text-foreground outline-none focus:border-primary"
-                >
-                  <option value="">Grup yok</option>
-                  {GRUPLAR.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.ad}
-                    </option>
-                  ))}
-                </select>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="min-w-0 truncate text-sm font-medium">{t.isim}</span>
+                  <select
+                    value={t.grup ?? ""}
+                    onChange={(e) => {
+                      const yeni = e.target.value as Grup | "";
+                      void talebeGuncelle(t.id, {
+                        grup: yeni === "" ? undefined : yeni,
+                      });
+                    }}
+                    className="h-9 shrink-0 rounded-md border border-border bg-background px-2 text-xs text-foreground outline-none focus:border-primary"
+                  >
+                    <option value="">Grup yok</option>
+                    {GRUPLAR.map((g) => (
+                      <option key={g.id} value={g.id}>
+                        {g.ad}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+                  <label className="flex items-center gap-1.5">
+                    <input
+                      type="checkbox"
+                      checked={!t.aidatSadece}
+                      onChange={(e) =>
+                        void talebeGuncelle(t.id, {
+                          aidatSadece: !e.target.checked,
+                        })
+                      }
+                    />
+                    Hafızlık listesinde
+                  </label>
+                  <label className="flex items-center gap-1.5">
+                    <input
+                      type="checkbox"
+                      checked={!t.aidatHaric}
+                      onChange={(e) =>
+                        void talebeGuncelle(t.id, {
+                          aidatHaric: !e.target.checked,
+                        })
+                      }
+                    />
+                    Aidat listesinde
+                  </label>
+                </div>
               </div>
             ))}
             {talebeler.length === 0 && (
