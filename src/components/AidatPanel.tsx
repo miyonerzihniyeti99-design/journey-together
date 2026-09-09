@@ -289,9 +289,10 @@ export default function AidatPanel({
           <Table className="table-fixed">
             <colgroup>
               <col className="w-[8%]" />
-              <col className="w-[42%]" />
-              <col className="w-[20%]" />
-              <col className="w-[30%]" />
+              <col className={grupFiltre === "hepsi" && hocaModu ? "w-[32%]" : "w-[42%]"} />
+              <col className="w-[15%]" />
+              <col className={grupFiltre === "hepsi" && hocaModu ? "w-[20%]" : "w-[30%]"} />
+              {grupFiltre === "hepsi" && hocaModu && <col className="w-[25%]" />}
             </colgroup>
             <TableHeader>
               <TableRow className="bg-muted/40">
