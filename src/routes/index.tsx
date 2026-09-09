@@ -740,12 +740,21 @@ function Index() {
         </Card>
 
         {sekme === "aidat" ? (
-          <AidatPanel
-            talebeler={talebeler}
-            hocaModu={hocaModu}
-            onTalebe={(t) => setProfilGoster(t)}
-            grupFiltre={grupFiltre}
-          />
+          <>
+            <AidatPanel
+              talebeler={aidatTalebeler}
+              hocaModu={hocaModu}
+              onTalebe={(t) => setProfilGoster(t)}
+              grupFiltre={grupFiltre}
+            />
+            {hocaModu && (
+              <div className="mt-4 flex justify-end">
+                <Button size="sm" onClick={() => ekle(true)}>
+                  <Plus className="h-4 w-4" /> Aidata talebe ekle
+                </Button>
+              </div>
+            )}
+          </>
         ) : (
 
         <>
