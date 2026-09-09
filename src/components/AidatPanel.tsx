@@ -22,6 +22,8 @@ import {
   aidatTutariniDinle,
   aidatTutariKaydet,
   aidatOdemeAyarla,
+  GRUPLAR,
+  type Grup,
   type Talebe,
 } from "@/lib/talebeler";
 import { bashHarfler } from "@/lib/foto";
@@ -65,6 +67,7 @@ export default function AidatPanel({
   const [tutarDuzenle, setTutarDuzenle] = useState(false);
   const [tutarTaslak, setTutarTaslak] = useState("0");
   const [filtre, setFiltre] = useState<"tumu" | "odeyen" | "odemeyen">("tumu");
+  const [grupFiltre, setGrupFiltre] = useState<Grup | "hepsi">("hepsi");
 
   useEffect(() => {
     const unsub = aidatTutariniDinle((t) => {
@@ -76,9 +79,16 @@ export default function AidatPanel({
 
   const ayKey = ayKeyOlustur(yil, ay);
 
+  const grupTalebeler = useMemo(() => {
+    if (grupFiltre === "hepsi") return talebeler;
+    return talebeler.filter((t) => t.grup === grupFiltre);
+  }, [talebeler, grupFiltre]);
+
+  const aktifGrup = GRUPLAR.find((g) => g.id === grupFiltre);
+
   const ozet = useMemo(() => {
-    const odeyen = talebeler.filter((t) => t.aidat?.[ayKey]).length;
-    const toplam = talebeler.length;
+    const odeyen = grupTalebeler.filter((t) => t.aidat?.[ayKey]).length;
+    const toplam = grupTalebeler.length;
     return {
       toplam,
       odeyen,
@@ -87,17 +97,17 @@ export default function AidatPanel({
       beklenen: toplam * tutar,
       kalan: (toplam - odeyen) * tutar,
     };
-  }, [talebeler, ayKey, tutar]);
+  }, [grupTalebeler, ayKey, tutar]);
 
   const gorunenTalebeler = useMemo(() => {
     if (filtre === "odeyen") {
-      return talebeler.filter((t) => t.aidat?.[ayKey]);
+      return grupTalebeler.filter((t) => t.aidat?.[ayKey]);
     }
     if (filtre === "odemeyen") {
-      return talebeler.filter((t) => !t.aidat?.[ayKey]);
+      return grupTalebeler.filter((t) => !t.aidat?.[ayKey]);
     }
-    return talebeler;
-  }, [talebeler, ayKey, filtre]);
+    return grupTalebeler;
+  }, [grupTalebeler, ayKey, filtre]);
 
   const ayDegistir = (fark: number) => {
     const d = new Date(yil, ay + fark, 1);
@@ -204,6 +214,42 @@ export default function AidatPanel({
           </div>
         </CardContent>
       </Card>
+
+      {/* Grup seçimi */}
+      <div className="mb-3 flex flex-wrap gap-2">
+        {[{ id: "hepsi" as const, ad: "Tümü", hoca: "" }, ...GRUPLAR].map((g) => {
+          const aktif = grupFiltre === g.id;
+          const sayi =
+            g.id === "hepsi"
+              ? talebeler.length
+              : talebeler.filter((t) => t.grup === g.id).length;
+          return (
+            <button
+              key={g.id}
+              type="button"
+              onClick={() => {
+                setGrupFiltre(g.id as Grup | "hepsi");
+                setFiltre("tumu");
+              }}
+              className={`rounded-full border px-3 py-1.5 text-xs font-medium transition sm:text-sm ${
+                aktif
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border/60 text-muted-foreground hover:border-primary/40 hover:bg-muted/40"
+              }`}
+            >
+              {g.ad}
+              <span className="ml-1 tabular-nums opacity-70">({sayi})</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {aktifGrup && (
+        <p className="mb-3 text-xs text-muted-foreground">
+          Mesul hoca:{" "}
+          <span className="font-medium text-foreground">{aktifGrup.hoca}</span>
+        </p>
+      )}
 
       {/* Özet */}
       <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -316,7 +362,7 @@ export default function AidatPanel({
                     colSpan={4}
                     className="py-10 text-center text-sm text-muted-foreground"
                   >
-                    {talebeler.length === 0
+                    {grupTalebeler.length === 0
                       ? "Henüz talebe yok."
                       : filtre === "odeyen"
                         ? "Bu ay ödeyen talebe yok."
