@@ -475,7 +475,7 @@ function Index() {
     void talebeGuncelle(t.id, patch);
   };
 
-  const ekle = () => {
+  const ekle = (sadeceAidat = false) => {
     const yeniNo = talebeler.length + 1;
     const enBuyukSira = talebeler.reduce(
       (m, t) => Math.max(m, t.sira ?? 0),
@@ -490,6 +490,8 @@ function Index() {
       yon: "alttan",
       fikihKonu: 1,
       hadisNo: 1,
+      aidatSadece: sadeceAidat,
+      aidatHaric: false,
     });
   };
 
