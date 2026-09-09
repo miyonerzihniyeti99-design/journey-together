@@ -942,7 +942,7 @@ function Index() {
 
         {hocaModu && (
           <div className="mt-4 flex justify-end">
-            <Button size="sm" onClick={ekle}>
+            <Button size="sm" onClick={() => ekle(false)}>
               <Plus className="h-4 w-4" /> {tr("talebeEkle")}
             </Button>
           </div>
