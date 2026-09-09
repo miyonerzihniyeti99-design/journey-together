@@ -306,6 +306,11 @@ export default function AidatPanel({
                 <TableHead className="px-0.5 text-center text-[10px] sm:px-4 sm:text-sm">
                   Durum
                 </TableHead>
+                {grupFiltre === "hepsi" && hocaModu && (
+                  <TableHead className="px-0.5 text-center text-[10px] sm:px-4 sm:text-sm">
+                    Grup
+                  </TableHead>
+                )}
               </TableRow>
             </TableHeader>
             <TableBody>
