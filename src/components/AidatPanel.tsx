@@ -56,10 +56,12 @@ export default function AidatPanel({
   talebeler,
   hocaModu,
   onTalebe,
+  grupFiltre,
 }: {
   talebeler: Talebe[];
   hocaModu: boolean;
   onTalebe?: (t: Talebe) => void;
+  grupFiltre: Grup | "hepsi";
 }) {
   const simdi = new Date();
   const [yil, setYil] = useState(simdi.getFullYear());
@@ -68,7 +70,7 @@ export default function AidatPanel({
   const [tutarDuzenle, setTutarDuzenle] = useState(false);
   const [tutarTaslak, setTutarTaslak] = useState("0");
   const [filtre, setFiltre] = useState<"tumu" | "odeyen" | "odemeyen">("tumu");
-  const [grupFiltre, setGrupFiltre] = useState<Grup | "hepsi">("hepsi");
+
 
   useEffect(() => {
     const unsub = aidatTutariniDinle((t) => {
