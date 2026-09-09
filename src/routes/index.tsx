@@ -65,6 +65,8 @@ import {
   talebeEkle,
   talebeGuncelle,
   talebeSil,
+  GRUPLAR,
+  type Grup,
   type Talebe,
   type SayfaKaydi,
   type KiraatYonu,
@@ -347,6 +349,7 @@ function Index() {
 
   const [hocaModu, setHocaModu] = useState(false);
   const [girisAcik, setGirisAcik] = useState(false);
+  const [gruplarAcik, setGruplarAcik] = useState(false);
   const [parolaTaslak, setParolaTaslak] = useState("");
   const [parolaHata, setParolaHata] = useState<string | null>(null);
 
@@ -578,6 +581,15 @@ function Index() {
                     {etiket}
                   </DropdownMenuItem>
                 ))}
+                {hocaModu && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel>Yönetim</DropdownMenuLabel>
+                    <DropdownMenuItem onSelect={() => setGruplarAcik(true)}>
+                      Gruplar oluştur
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
             <span className="hidden text-sm font-medium text-muted-foreground sm:inline">
@@ -1028,6 +1040,53 @@ function Index() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={gruplarAcik} onOpenChange={setGruplarAcik}>
+        <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Gruplar oluştur</DialogTitle>
+            <DialogDescription>
+              Talebeleri gruplara atayın. Mesul hocalar: {GRUPLAR.map((g) => `${g.ad} — ${g.hoca}`).join(", ")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            {talebeler.map((t) => (
+              <div
+                key={t.id}
+                className="flex items-center justify-between gap-3 rounded-md border border-border/60 px-3 py-2"
+              >
+                <span className="min-w-0 truncate text-sm font-medium">{t.isim}</span>
+                <select
+                  value={t.grup ?? ""}
+                  onChange={(e) => {
+                    const yeni = e.target.value as Grup | "";
+                    void talebeGuncelle(t.id, {
+                      grup: yeni === "" ? undefined : yeni,
+                    });
+                  }}
+                  className="h-9 shrink-0 rounded-md border border-border bg-background px-2 text-xs text-foreground outline-none focus:border-primary"
+                >
+                  <option value="">Grup yok</option>
+                  {GRUPLAR.map((g) => (
+                    <option key={g.id} value={g.id}>
+                      {g.ad}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+            {talebeler.length === 0 && (
+              <p className="py-6 text-center text-sm text-muted-foreground">
+                Henüz talebe yok.
+              </p>
+            )}
+          </div>
+          <DialogFooter>
+            <Button onClick={() => setGruplarAcik(false)}>Kapat</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
 
       <DuzenleDiyalog
         talebe={duzenlenen}

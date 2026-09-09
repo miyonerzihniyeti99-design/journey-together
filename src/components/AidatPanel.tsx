@@ -22,7 +22,7 @@ import {
   aidatTutariniDinle,
   aidatTutariKaydet,
   aidatOdemeAyarla,
-  talebeGuncelle,
+  
   GRUPLAR,
   type Grup,
   type Talebe,
@@ -245,12 +245,6 @@ export default function AidatPanel({
         })}
       </div>
 
-      {grupFiltre === "hepsi" && hocaModu && (
-        <p className="mb-3 text-xs text-muted-foreground">
-          Talebeleri gruplara atamak için tablodaki{" "}
-          <span className="font-medium text-foreground">Grup</span> menüsünü kullanın.
-        </p>
-      )}
       {aktifGrup && (
         <p className="mb-3 text-xs text-muted-foreground">
           Mesul hoca:{" "}
@@ -295,10 +289,9 @@ export default function AidatPanel({
           <Table className="table-fixed">
             <colgroup>
               <col className="w-[8%]" />
-              <col className={grupFiltre === "hepsi" && hocaModu ? "w-[32%]" : "w-[42%]"} />
+              <col className="w-[42%]" />
               <col className="w-[15%]" />
-              <col className={grupFiltre === "hepsi" && hocaModu ? "w-[20%]" : "w-[30%]"} />
-              {grupFiltre === "hepsi" && hocaModu && <col className="w-[25%]" />}
+              <col className="w-[30%]" />
             </colgroup>
             <TableHeader>
               <TableRow className="bg-muted/40">
@@ -312,12 +305,8 @@ export default function AidatPanel({
                 <TableHead className="px-0.5 text-center text-[10px] sm:px-4 sm:text-sm">
                   Durum
                 </TableHead>
-                {grupFiltre === "hepsi" && hocaModu && (
-                  <TableHead className="px-0.5 text-center text-[10px] sm:px-4 sm:text-sm">
-                    Grup
-                  </TableHead>
-                )}
               </TableRow>
+
             </TableHeader>
             <TableBody>
               {gorunenTalebeler.map((t, i) => {
@@ -366,34 +355,14 @@ export default function AidatPanel({
                         {odendi ? "Ödedi" : "Ödemedi"}
                       </button>
                     </TableCell>
-                    {grupFiltre === "hepsi" && hocaModu && (
-                      <TableCell className="px-0.5 py-2 text-center sm:px-4 sm:py-3">
-                        <select
-                          value={t.grup ?? ""}
-                          onChange={(e) => {
-                            const yeni = e.target.value as Grup | "";
-                            void talebeGuncelle(t.id, {
-                              grup: yeni === "" ? undefined : yeni,
-                            });
-                          }}
-                          className="h-8 max-w-full rounded-md border border-border bg-background px-2 text-[10px] text-foreground outline-none focus:border-primary sm:text-xs"
-                        >
-                          <option value="">Grup yok</option>
-                          {GRUPLAR.map((g) => (
-                            <option key={g.id} value={g.id}>
-                              {g.ad}
-                            </option>
-                          ))}
-                        </select>
-                      </TableCell>
-                    )}
                   </TableRow>
                 );
               })}
               {gorunenTalebeler.length === 0 && (
                 <TableRow>
                   <TableCell
-                    colSpan={grupFiltre === "hepsi" && hocaModu ? 5 : 4}
+                    colSpan={4}
+
                     className="py-10 text-center text-sm text-muted-foreground"
                   >
                     {grupTalebeler.length === 0
