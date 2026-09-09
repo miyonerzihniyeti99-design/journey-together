@@ -577,8 +577,34 @@ function Index() {
                 ] as const).map(([k, etiket]) => (
                   <DropdownMenuItem
                     key={k}
-                    onSelect={() => setSekme(k)}
+                    onSelect={() => {
+                      setSekme(k);
+                      if (k === "aidat") setGrupFiltre("hepsi");
+                    }}
                     className={sekme === k ? "font-semibold text-primary" : ""}
+                  >
+                    {etiket}
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Gruplar</DropdownMenuLabel>
+                {([
+                  ["hepsi", "Tümü"],
+                  ["seviye1", "1. Seviye"],
+                  ["seviye2", "2. Seviye"],
+                  ["hazirlik", "Hazırlık"],
+                ] as const).map(([k, etiket]) => (
+                  <DropdownMenuItem
+                    key={k}
+                    onSelect={() => {
+                      setSekme("aidat");
+                      setGrupFiltre(k as Grup | "hepsi");
+                    }}
+                    className={
+                      sekme === "aidat" && grupFiltre === k
+                        ? "font-semibold text-primary"
+                        : ""
+                    }
                   >
                     {etiket}
                   </DropdownMenuItem>
@@ -593,6 +619,7 @@ function Index() {
                   </>
                 )}
               </DropdownMenuContent>
+
             </DropdownMenu>
             <span className="hidden text-sm font-medium text-muted-foreground sm:inline">
               {sekme === "aidat" ? "Aidat Takibi" : "Hafızlık Takibi"}
