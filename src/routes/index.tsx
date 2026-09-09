@@ -493,22 +493,31 @@ function Index() {
     });
   };
 
+  const hafizTalebeler = useMemo(
+    () => talebeler.filter((t) => !t.aidatSadece),
+    [talebeler],
+  );
+  const aidatTalebeler = useMemo(
+    () => talebeler.filter((t) => !t.aidatHaric),
+    [talebeler],
+  );
+
   const haftalikToplam = useMemo(
     () =>
-      talebeler.reduce(
+      hafizTalebeler.reduce(
         (acc, t) => acc + ilerleme(t, seciliHafta, haftaSonu),
         0,
       ),
-    [talebeler, seciliHafta, haftaSonu],
+    [hafizTalebeler, seciliHafta, haftaSonu],
   );
 
   const ozet = useMemo(() => {
-    const toplam = talebeler.length;
-    const kiraatSayi = talebeler.filter(
+    const toplam = hafizTalebeler.length;
+    const kiraatSayi = hafizTalebeler.filter(
       (t) => getDersGunler(t, seciliDers, seciliHafta).includes(seciliGun),
     ).length;
     return { toplam, kiraatSayi };
-  }, [talebeler, seciliHafta, seciliGun, seciliDers]);
+  }, [hafizTalebeler, seciliHafta, seciliGun, seciliDers]);
 
 
   const girisYap = () => {
