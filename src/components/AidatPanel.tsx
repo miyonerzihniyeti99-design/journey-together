@@ -387,7 +387,7 @@ export default function AidatPanel({
               {gorunenTalebeler.length === 0 && (
                 <TableRow>
                   <TableCell
-                    colSpan={4}
+                    colSpan={grupFiltre === "hepsi" && hocaModu ? 5 : 4}
                     className="py-10 text-center text-sm text-muted-foreground"
                   >
                     {grupTalebeler.length === 0
