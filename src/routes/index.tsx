@@ -475,7 +475,7 @@ function Index() {
     void talebeGuncelle(t.id, patch);
   };
 
-  const ekle = () => {
+  const ekle = (sadeceAidat = false) => {
     const yeniNo = talebeler.length + 1;
     const enBuyukSira = talebeler.reduce(
       (m, t) => Math.max(m, t.sira ?? 0),
@@ -490,25 +490,36 @@ function Index() {
       yon: "alttan",
       fikihKonu: 1,
       hadisNo: 1,
+      aidatSadece: sadeceAidat,
+      aidatHaric: false,
     });
   };
 
+  const hafizTalebeler = useMemo(
+    () => talebeler.filter((t) => !t.aidatSadece),
+    [talebeler],
+  );
+  const aidatTalebeler = useMemo(
+    () => talebeler.filter((t) => !t.aidatHaric),
+    [talebeler],
+  );
+
   const haftalikToplam = useMemo(
     () =>
-      talebeler.reduce(
+      hafizTalebeler.reduce(
         (acc, t) => acc + ilerleme(t, seciliHafta, haftaSonu),
         0,
       ),
-    [talebeler, seciliHafta, haftaSonu],
+    [hafizTalebeler, seciliHafta, haftaSonu],
   );
 
   const ozet = useMemo(() => {
-    const toplam = talebeler.length;
-    const kiraatSayi = talebeler.filter(
+    const toplam = hafizTalebeler.length;
+    const kiraatSayi = hafizTalebeler.filter(
       (t) => getDersGunler(t, seciliDers, seciliHafta).includes(seciliGun),
     ).length;
     return { toplam, kiraatSayi };
-  }, [talebeler, seciliHafta, seciliGun, seciliDers]);
+  }, [hafizTalebeler, seciliHafta, seciliGun, seciliDers]);
 
 
   const girisYap = () => {
@@ -729,12 +740,21 @@ function Index() {
         </Card>
 
         {sekme === "aidat" ? (
-          <AidatPanel
-            talebeler={talebeler}
-            hocaModu={hocaModu}
-            onTalebe={(t) => setProfilGoster(t)}
-            grupFiltre={grupFiltre}
-          />
+          <>
+            <AidatPanel
+              talebeler={aidatTalebeler}
+              hocaModu={hocaModu}
+              onTalebe={(t) => setProfilGoster(t)}
+              grupFiltre={grupFiltre}
+            />
+            {hocaModu && (
+              <div className="mt-4 flex justify-end">
+                <Button size="sm" onClick={() => ekle(true)}>
+                  <Plus className="h-4 w-4" /> Aidata talebe ekle
+                </Button>
+              </div>
+            )}
+          </>
         ) : (
 
         <>
@@ -831,7 +851,7 @@ function Index() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {talebeler.map((t, i) => {
+                {hafizTalebeler.map((t, i) => {
                   const hafta = ilerleme(t, seciliHafta, haftaSonu);
                   return (
                   <TableRow key={t.id} className="hover:bg-muted/30">
@@ -892,7 +912,7 @@ function Index() {
                   </TableRow>
                   );
                 })}
-                {!yuklendi && talebeler.length === 0 && (
+                {!yuklendi && hafizTalebeler.length === 0 && (
                   <TableRow>
                     <TableCell
                       colSpan={5 + (hocaModu ? 1 : 0)}
@@ -915,7 +935,7 @@ function Index() {
                     </TableCell>
                   </TableRow>
                 )}
-                {yuklendi && !yuklemeHata && talebeler.length === 0 && (
+                {yuklendi && !yuklemeHata && hafizTalebeler.length === 0 && (
                   <TableRow>
                     <TableCell
                       colSpan={5 + (hocaModu ? 1 : 0)}
@@ -931,7 +951,7 @@ function Index() {
 
         {hocaModu && (
           <div className="mt-4 flex justify-end">
-            <Button size="sm" onClick={ekle}>
+            <Button size="sm" onClick={() => ekle(false)}>
               <Plus className="h-4 w-4" /> {tr("talebeEkle")}
             </Button>
           </div>
@@ -944,7 +964,7 @@ function Index() {
         acik={vermediAcik}
         onClose={() => setVermediAcik(false)}
         gunAdi={tr("haftaGunUzun")[seciliGun]}
-        talebeler={talebeler.filter(
+        talebeler={hafizTalebeler.filter(
           (t) => !getDersGunler(t, seciliDers, seciliHafta).includes(seciliGun),
         )}
         onTalebe={(t) => {
@@ -956,7 +976,7 @@ function Index() {
       <RaporDiyalog
         acik={raporAcik}
         onClose={() => setRaporAcik(false)}
-        talebeler={talebeler}
+        talebeler={hafizTalebeler}
         haftaBas={seciliHafta}
         haftaEtiketi={haftaEtiket(seciliHafta)}
         onTalebe={(t) => {
@@ -1084,26 +1104,54 @@ function Index() {
             {talebeler.map((t) => (
               <div
                 key={t.id}
-                className="flex items-center justify-between gap-3 rounded-md border border-border/60 px-3 py-2"
+                className="rounded-md border border-border/60 px-3 py-2"
               >
-                <span className="min-w-0 truncate text-sm font-medium">{t.isim}</span>
-                <select
-                  value={t.grup ?? ""}
-                  onChange={(e) => {
-                    const yeni = e.target.value as Grup | "";
-                    void talebeGuncelle(t.id, {
-                      grup: yeni === "" ? undefined : yeni,
-                    });
-                  }}
-                  className="h-9 shrink-0 rounded-md border border-border bg-background px-2 text-xs text-foreground outline-none focus:border-primary"
-                >
-                  <option value="">Grup yok</option>
-                  {GRUPLAR.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.ad}
-                    </option>
-                  ))}
-                </select>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="min-w-0 truncate text-sm font-medium">{t.isim}</span>
+                  <select
+                    value={t.grup ?? ""}
+                    onChange={(e) => {
+                      const yeni = e.target.value as Grup | "";
+                      void talebeGuncelle(t.id, {
+                        grup: yeni === "" ? undefined : yeni,
+                      });
+                    }}
+                    className="h-9 shrink-0 rounded-md border border-border bg-background px-2 text-xs text-foreground outline-none focus:border-primary"
+                  >
+                    <option value="">Grup yok</option>
+                    {GRUPLAR.map((g) => (
+                      <option key={g.id} value={g.id}>
+                        {g.ad}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+                  <label className="flex items-center gap-1.5">
+                    <input
+                      type="checkbox"
+                      checked={!t.aidatSadece}
+                      onChange={(e) =>
+                        void talebeGuncelle(t.id, {
+                          aidatSadece: !e.target.checked,
+                        })
+                      }
+                    />
+                    Hafızlık listesinde
+                  </label>
+                  <label className="flex items-center gap-1.5">
+                    <input
+                      type="checkbox"
+                      checked={!t.aidatHaric}
+                      onChange={(e) =>
+                        void talebeGuncelle(t.id, {
+                          aidatHaric: !e.target.checked,
+                        })
+                      }
+                    />
+                    Aidat listesinde
+                  </label>
+                </div>
               </div>
             ))}
             {talebeler.length === 0 && (
