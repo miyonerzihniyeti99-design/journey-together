@@ -368,8 +368,10 @@ function Index() {
   const [parolaDegistirHata, setParolaDegistirHata] = useState<string | null>(null);
 
   const [sekme, setSekme] = useState<"hafizlik" | "aidat">("hafizlik");
+  const [grupFiltre, setGrupFiltre] = useState<Grup | "hepsi">("hepsi");
 
   const [vermediAcik, setVermediAcik] = useState(false);
+
   const [raporAcik, setRaporAcik] = useState(false);
 
   const dil: Dil = "tr";
@@ -575,8 +577,34 @@ function Index() {
                 ] as const).map(([k, etiket]) => (
                   <DropdownMenuItem
                     key={k}
-                    onSelect={() => setSekme(k)}
+                    onSelect={() => {
+                      setSekme(k);
+                      if (k === "aidat") setGrupFiltre("hepsi");
+                    }}
                     className={sekme === k ? "font-semibold text-primary" : ""}
+                  >
+                    {etiket}
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Gruplar</DropdownMenuLabel>
+                {([
+                  ["hepsi", "Tümü"],
+                  ["seviye1", "1. Seviye"],
+                  ["seviye2", "2. Seviye"],
+                  ["hazirlik", "Hazırlık"],
+                ] as const).map(([k, etiket]) => (
+                  <DropdownMenuItem
+                    key={k}
+                    onSelect={() => {
+                      setSekme("aidat");
+                      setGrupFiltre(k as Grup | "hepsi");
+                    }}
+                    className={
+                      sekme === "aidat" && grupFiltre === k
+                        ? "font-semibold text-primary"
+                        : ""
+                    }
                   >
                     {etiket}
                   </DropdownMenuItem>
@@ -591,6 +619,7 @@ function Index() {
                   </>
                 )}
               </DropdownMenuContent>
+
             </DropdownMenu>
             <span className="hidden text-sm font-medium text-muted-foreground sm:inline">
               {sekme === "aidat" ? "Aidat Takibi" : "Hafızlık Takibi"}
@@ -704,8 +733,10 @@ function Index() {
             talebeler={talebeler}
             hocaModu={hocaModu}
             onTalebe={(t) => setProfilGoster(t)}
+            grupFiltre={grupFiltre}
           />
         ) : (
+
         <>
         <div className="mb-3 grid grid-cols-2 gap-3">
           <OzetKart etiket={tr("toplamTalebe")} deger={ozet.toplam} />
