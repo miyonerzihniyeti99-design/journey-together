@@ -355,34 +355,14 @@ export default function AidatPanel({
                         {odendi ? "Ödedi" : "Ödemedi"}
                       </button>
                     </TableCell>
-                    {grupFiltre === "hepsi" && hocaModu && (
-                      <TableCell className="px-0.5 py-2 text-center sm:px-4 sm:py-3">
-                        <select
-                          value={t.grup ?? ""}
-                          onChange={(e) => {
-                            const yeni = e.target.value as Grup | "";
-                            void talebeGuncelle(t.id, {
-                              grup: yeni === "" ? undefined : yeni,
-                            });
-                          }}
-                          className="h-8 max-w-full rounded-md border border-border bg-background px-2 text-[10px] text-foreground outline-none focus:border-primary sm:text-xs"
-                        >
-                          <option value="">Grup yok</option>
-                          {GRUPLAR.map((g) => (
-                            <option key={g.id} value={g.id}>
-                              {g.ad}
-                            </option>
-                          ))}
-                        </select>
-                      </TableCell>
-                    )}
                   </TableRow>
                 );
               })}
               {gorunenTalebeler.length === 0 && (
                 <TableRow>
                   <TableCell
-                    colSpan={grupFiltre === "hepsi" && hocaModu ? 5 : 4}
+                    colSpan={4}
+
                     className="py-10 text-center text-sm text-muted-foreground"
                   >
                     {grupTalebeler.length === 0
