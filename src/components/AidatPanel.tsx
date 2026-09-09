@@ -79,9 +79,16 @@ export default function AidatPanel({
 
   const ayKey = ayKeyOlustur(yil, ay);
 
+  const grupTalebeler = useMemo(() => {
+    if (grupFiltre === "hepsi") return talebeler;
+    return talebeler.filter((t) => t.grup === grupFiltre);
+  }, [talebeler, grupFiltre]);
+
+  const aktifGrup = GRUPLAR.find((g) => g.id === grupFiltre);
+
   const ozet = useMemo(() => {
-    const odeyen = talebeler.filter((t) => t.aidat?.[ayKey]).length;
-    const toplam = talebeler.length;
+    const odeyen = grupTalebeler.filter((t) => t.aidat?.[ayKey]).length;
+    const toplam = grupTalebeler.length;
     return {
       toplam,
       odeyen,
@@ -90,17 +97,17 @@ export default function AidatPanel({
       beklenen: toplam * tutar,
       kalan: (toplam - odeyen) * tutar,
     };
-  }, [talebeler, ayKey, tutar]);
+  }, [grupTalebeler, ayKey, tutar]);
 
   const gorunenTalebeler = useMemo(() => {
     if (filtre === "odeyen") {
-      return talebeler.filter((t) => t.aidat?.[ayKey]);
+      return grupTalebeler.filter((t) => t.aidat?.[ayKey]);
     }
     if (filtre === "odemeyen") {
-      return talebeler.filter((t) => !t.aidat?.[ayKey]);
+      return grupTalebeler.filter((t) => !t.aidat?.[ayKey]);
     }
-    return talebeler;
-  }, [talebeler, ayKey, filtre]);
+    return grupTalebeler;
+  }, [grupTalebeler, ayKey, filtre]);
 
   const ayDegistir = (fark: number) => {
     const d = new Date(yil, ay + fark, 1);
