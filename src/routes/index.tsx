@@ -581,6 +581,15 @@ function Index() {
                     {etiket}
                   </DropdownMenuItem>
                 ))}
+                {hocaModu && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel>Yönetim</DropdownMenuLabel>
+                    <DropdownMenuItem onSelect={() => setGruplarAcik(true)}>
+                      Gruplar oluştur
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
             <span className="hidden text-sm font-medium text-muted-foreground sm:inline">
