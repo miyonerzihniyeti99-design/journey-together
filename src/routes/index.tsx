@@ -706,8 +706,10 @@ function Index() {
             talebeler={talebeler}
             hocaModu={hocaModu}
             onTalebe={(t) => setProfilGoster(t)}
+            grupFiltre={grupFiltre}
           />
         ) : (
+
         <>
         <div className="mb-3 grid grid-cols-2 gap-3">
           <OzetKart etiket={tr("toplamTalebe")} deger={ozet.toplam} />
