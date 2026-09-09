@@ -362,7 +362,7 @@ export default function AidatPanel({
                     colSpan={4}
                     className="py-10 text-center text-sm text-muted-foreground"
                   >
-                    {talebeler.length === 0
+                    {grupTalebeler.length === 0
                       ? "Henüz talebe yok."
                       : filtre === "odeyen"
                         ? "Bu ay ödeyen talebe yok."
